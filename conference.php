@@ -1,4 +1,5 @@
 <?php include 'config.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,8 +9,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
         <h1>Conference Organizer Portal</h1>
+		<?php include 'getdata.php';?>
         <nav>
             <ul>
                 <li><a href="pages/subcommittees.php">Sub-Committees</a></li>
@@ -22,7 +23,6 @@
                 <li><a href="pages/add_sponsor.php">Add Sponsor</a></li>
             </ul>
         </nav>
-    </header>
     <main>
         <p>Welcome to the Conference Organizer Portal.</p>
     </main>
