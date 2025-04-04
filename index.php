@@ -28,7 +28,6 @@
                 <li><a href="sponsors.php">Sponsors</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="attendees.php">Attendees</a></li>
-                <li><a href="total_intake.php">Total Intake</a></li>
             </ul>
         </nav>
     <main>
