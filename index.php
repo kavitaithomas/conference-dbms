@@ -10,7 +10,16 @@
 </head>
 <body>
         <h1>Conference Organizer Portal</h1>
-		<?php include 'getdata.php';?>
+		<?php
+            $result = $pdo->query("select * from company");
+            echo "<ol>";
+            while ($row = $result->fetch()) {
+                echo "<li>";
+                echo $row["name"]."</li>";
+            }
+            echo "</ol>";
+        ?>
+        
         <nav>
             <ul>
                 <li><a href="subcommittees.php">Subcommittees</a></li>
