@@ -13,7 +13,7 @@
 		<?php include 'getdata.php';?>
         <nav>
             <ul>
-                <li><a href="pages/subcommittees.php">Sub-Committees</a></li>
+                <li><a href="subcommittees.php">Subcommittees</a></li>
                 <li><a href="pages/hotel_rooms.php">Hotel Rooms</a></li>
                 <li><a href="pages/schedule.php">Schedule</a></li>
                 <li><a href="pages/sponsors.php">Sponsors</a></li>

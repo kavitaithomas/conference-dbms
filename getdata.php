@@ -1,5 +1,5 @@
 <?php
-$result = $connection->query("select * from company");
+$result = $pdo->query("select * from company");
 echo "<ol>";
 while ($row = $result->fetch()) {
 	echo "<li>";
