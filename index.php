@@ -14,13 +14,13 @@
         <nav>
             <ul>
                 <li><a href="subcommittees.php">Subcommittees</a></li>
-                <li><a href="pages/hotel_rooms.php">Hotel Rooms</a></li>
-                <li><a href="pages/schedule.php">Schedule</a></li>
-                <li><a href="pages/sponsors.php">Sponsors</a></li>
-                <li><a href="pages/jobs.php">Jobs</a></li>
-                <li><a href="pages/attendees.php">Attendees</a></li>
-                <li><a href="pages/add_attendee.php">Add Attendee</a></li>
-                <li><a href="pages/add_sponsor.php">Add Sponsor</a></li>
+                <li><a href="hotel_rooms.php">Hotel Rooms</a></li>
+                <li><a href="schedule.php">Schedule</a></li>
+                <li><a href="sponsors.php">Sponsors</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="attendees.php">Attendees</a></li>
+                <li><a href="add_attendee.php">Add Attendee</a></li>
+                <li><a href="add_sponsor.php">Add Sponsor</a></li>
             </ul>
         </nav>
     <main>
