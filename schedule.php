@@ -5,52 +5,21 @@ include 'config.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-//form submission for modifying session
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_session'])) {
-    $sessionID = $_POST['session_id'];  // ID or unique identifier for session
-    $newDate = $_POST['new_date'];
-    $newStime = $_POST['new_stime'];
-    $newEtime = $_POST['new_etime'];
-    $newLocation = $_POST['new_location'];
-
-    // Debugging: Check if the required variables are set
-    if (empty($sessionID) || empty($newDate) || empty($newStime) || empty($newEtime) || empty($newLocation)) {
-        echo "Error: One or more required fields are empty!";
-        exit;
-    }
-
-    try {
-        // Update session in the 'session' table
-        $updateStmt = $pdo->prepare("
-            UPDATE session 
-            SET date = ?, stime = ?, etime = ?, location = ?
-            WHERE location = ? AND date = ? AND stime = ?
-        ");
-        
-        // Debugging: Check the session_id value
-        echo "Session ID received: " . htmlspecialchars($sessionID); // Add this line for debugging
-        $sessionDetails = explode(',', $sessionID);  // Extract session details from hidden field
-        $location = $sessionDetails[0];
-        $date = $sessionDetails[1];
-        $stime = $sessionDetails[2];
-        
-        // Update the session record
-        $updateStmt->execute([$newDate, $newStime, $newEtime, $newLocation, $location, $date, $stime]);
-
-        
-        $success = "Session updated successfully.";
-    } catch (PDOException $e) {
-        
-        echo "<p>Error updating session: " . $e->getMessage() . "</p>";
-    }
+// Fetch all available session dates for dropdown
+try {
+    $dateQuery = "SELECT DISTINCT date FROM session ORDER BY date";
+    $dateStmt = $pdo->query($dateQuery);
+    $dates = $dateStmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "<p>Error fetching available dates: " . $e->getMessage() . "</p>";
 }
 
-// Query to get sessions for the selected date
+// Handle form submission for filtering sessions by date
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['schedule_date'])) {
     $selectedDate = $_POST['schedule_date'];
 
     try {
-        // Query to get sessions for the selected date
+        // Fetch sessions based on selected date
         $sql = "
             SELECT s.location, s.date, s.stime, s.etime, sp.firstname, sp.lastname
             FROM session s
@@ -61,136 +30,109 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['schedule_date'])) {
         ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['selectedDate' => $selectedDate]);
-        $schedule = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        $scheduleByDate = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         echo "<p>Error fetching schedule: " . $e->getMessage() . "</p>";
     }
 }
 
-// Query to fetch distinct session dates
+// Fetch all sessions if no specific date is selected
 try {
-    $dateQuery = "SELECT DISTINCT date FROM session ORDER BY date";
-    $dateStmt = $pdo->query($dateQuery);
-    $dates = $dateStmt->fetchAll(PDO::FETCH_ASSOC);
+    $sql = "
+        SELECT s.location, s.date, s.stime, s.etime, sp.firstname, sp.lastname
+        FROM session s
+        LEFT JOIN speaksAt sa ON s.location = sa.location AND s.date = sa.date AND s.stime = sa.stime
+        LEFT JOIN speaker sp ON sa.speakerID = sp.id
+        ORDER BY s.date, s.stime
+    ";
+    $stmt = $pdo->query($sql);
+    $allSessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo "<p>Error fetching available dates: " . $e->getMessage() . "</p>";
+    echo "<p>Error fetching schedule: " . $e->getMessage() . "</p>";
 }
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Hotel Room Students</title>
+    <title>View Conference Schedule</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body class="background">
-    <div class="container">
 
-        <div class="button-container">
-            <a href="index.php">Go back home</a>
-        </div>
-
-        <h1>View Conference Schedule</h1>
-        <p>Select a date to view all sessions scheduled for that day:</p>
-
-        <!-- Form to select the date from available session dates -->
-        <form action="schedule.php" method="post" class="form">
-            <label for="schedule_date">Date:</label>
-            <select id="schedule_date" name="schedule_date" required class="dropdown">
-                <option value="">-- Select --</option>
-                <?php
-                foreach ($dates as $date) {
-                    echo '<option value="' . htmlspecialchars($date['date']) . '">' . htmlspecialchars($date['date']) . '</option>';
-                }
-                ?>
-            </select>
-            <input type="submit" value="View Schedule" class="submit-btn">
-        </form>
-
-        <?php
-        if (isset($schedule)) {
-            echo "<h2>Schedule for " . htmlspecialchars($selectedDate) . "</h2>";
-
-            if ($schedule) {
-                echo "<table class='styled-table'>
-                        <tr>
-                            <th>Location</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Speaker</th>
-                            <th>Action</th>
-                        </tr>";
-
-                foreach ($schedule as $row) {
-                    echo "<tr>
-                            <td>" . htmlspecialchars($row['location']) . "</td>
-                            <td>" . htmlspecialchars($row['stime']) . "</td>
-                            <td>" . htmlspecialchars($row['etime']) . "</td>
-                            <td>";
-                    if ($row['firstname']) {
-                        echo htmlspecialchars($row['firstname']) . " " . htmlspecialchars($row['lastname']);
-                    } else {
-                        echo "—";
-                    }
-                    echo "</td>
-                            <td>
-                                <form method='POST' class='inline-form'>
-                                    <input type='hidden' name='session_id' value='" . htmlspecialchars($row['location']) . "," . htmlspecialchars($row['date']) . "," . htmlspecialchars($row['stime']) . "'>
-                                    <input type='submit' name='modify_session' value='Modify' class='modify-button'>
-                                </form>
-                            </td>
-                        </tr>";
-                }
-                echo "</table>";
-            } else {
-                echo "<p>No sessions scheduled for this date.</p>";
-            }
-        }
-
-        if (isset($_POST['modify_session'])) {
-            list($location, $date, $stime) = explode(',', $_POST['session_id']);
-
-            $fetchSessionStmt = $pdo->prepare("SELECT * FROM session WHERE location = ? AND date = ? AND stime = ?");
-            $fetchSessionStmt->execute([$location, $date, $stime]);
-            $session = $fetchSessionStmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($session) {
-                ?>
-                <h2>Modify Session</h2>
-                <form method="POST" class="form">
-                    <input type="hidden" name="session_id" value="<?= htmlspecialchars($session['location']) . ',' . htmlspecialchars($session['date']) . ',' . htmlspecialchars($session['stime']) ?>">
-                    <label for="new_date">New Date:</label>
-                    <input type="date" name="new_date" value="<?= htmlspecialchars($session['date']) ?>" required><br>
-
-                    <label for="new_stime">New Start Time:</label>
-                    <input type="time" name="new_stime" value="<?= htmlspecialchars($session['stime']) ?>" required><br>
-
-                    <label for="new_etime">New End Time:</label>
-                    <input type="time" name="new_etime" value="<?= htmlspecialchars($session['etime']) ?>" required><br>
-
-                    <label for="new_location">New Location:</label>
-                    <input type="text" name="new_location" value="<?= htmlspecialchars($session['location']) ?>" required><br>
-
-                    <input type="submit" name="update_session" value="Update Session" class="home-button">
-                </form>
-                <?php
-            } else {
-                echo "<p>Session not found.</p>";
-            }
-        }
-        ?>
-
-        <?php if (isset($success)): ?>
-            <p class="success-message"><?= htmlspecialchars($success) ?></p>
-        <?php elseif (isset($error)): ?>
-            <p class="error-message"><?= htmlspecialchars($error) ?></p>
-        <?php endif; ?>
+    <div class="button-container">
+    <a href="conference.php">Go back home</a>
     </div>
+
+    <h1>View Conference Schedule</h1>
+    <p>Select a date to view all sessions scheduled for that day:</p>
+
+    <!-- Form to select the date from available session dates -->
+    <form action="schedule.php" method="post" class="form">
+        <label for="schedule_date">Date:</label>
+        <select id="schedule_date" name="schedule_date" required class="dropdown">
+            <option value="">-- Select --</option>
+            <?php
+            foreach ($dates as $date) {
+                echo '<option value="' . htmlspecialchars($date['date']) . '">' . htmlspecialchars($date['date']) . '</option>';
+            }
+            ?>
+        </select>
+        <input type="submit" value="View Schedule" class="submit-btn">
+    </form>
+
+    <!-- Display schedule for the selected day if there is any -->
+    <?php if (isset($scheduleByDate)): ?>
+        <?php if ($scheduleByDate): ?>
+            <h2>Sessions on <?= htmlspecialchars($selectedDate) ?></h2>
+            <table class="styled-table">
+                <tr>
+                    <th>Location</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Speaker</th>
+                </tr>
+                <?php foreach ($scheduleByDate as $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['location']) ?></td>
+                        <td><?= htmlspecialchars($row['stime']) ?></td>
+                        <td><?= htmlspecialchars($row['etime']) ?></td>
+                        <td>
+                            <?= htmlspecialchars($row['firstname']) ? htmlspecialchars($row['firstname']) . ' ' . htmlspecialchars($row['lastname']) : '—' ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php else: ?>
+            <p>No sessions scheduled for this date.</p>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <h2>All Sessions</h2>
+    <table class="styled-table">
+        <tr>
+            <th>Location</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Speaker</th>
+        </tr>
+        <?php foreach ($allSessions as $row): ?>
+            <tr>
+                <td><?= htmlspecialchars($row['location']) ?></td>
+                <td><?= htmlspecialchars($row['stime']) ?></td>
+                <td><?= htmlspecialchars($row['etime']) ?></td>
+                <td>
+                    <?= htmlspecialchars($row['firstname']) ? htmlspecialchars($row['firstname']) . ' ' . htmlspecialchars($row['lastname']) : '—' ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+
 </body>
 </html>
 

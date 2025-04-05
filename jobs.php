@@ -47,7 +47,7 @@ try {
 </head>
 <body class="background">
     <div class="button-container">
-        <a href="index.php">Go back home</a>
+    <a href="conference.php">Go back home</a>
     </div>
 
     <h1>Jobs by Company</h1>

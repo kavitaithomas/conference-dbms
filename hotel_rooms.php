@@ -10,14 +10,14 @@
 </head>
 <body class="background">
     <div>
-        
         <div class="button-container">
-            <a href="index.php">Go back home</a>
+        <a href="conference.php">Go back home</a>
         </div>
 
         <h1>Hotel Room Assignments</h1>
         <p>Select a hotel room to view the students assigned to it:</p>
 
+        <!-- Filter form for selecting a specific room -->
         <form method="post" action="hotel_rooms.php">
             <label for="room">Hotel Room:</label>
             <select name="room" id="room" required>
@@ -40,6 +40,7 @@
         </form>
 
         <?php
+        // Show selected room's students if the form is submitted
         if (!empty($_POST['room'])) {
             $roomNum = $_POST['room'];
             echo "<h2 class='results-heading'>Students in Room " . htmlspecialchars($roomNum) . "</h2>";
@@ -68,11 +69,46 @@
             } catch (PDOException $e) {
                 echo "<p class='error-message'>Error fetching students: " . $e->getMessage() . "</p>";
             }
-
-            $pdo = null;
         }
+
+        // Show all rooms in a single table with room number, number of beds, and number of students
+        echo "<h2 class='results-heading'>All Hotel Rooms</h2>";
+        echo "<table class='results-table'>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Number of Beds</th>
+                    <th>Number of Students</th>
+                </tr>";
+
+        try {
+            $sql = "
+                SELECT r.num AS roomNum, r.num_beds, COUNT(a.studentID) AS numStudents
+                FROM room r
+                LEFT JOIN assigned a ON r.num = a.roomNum
+                GROUP BY r.num
+                ORDER BY r.num
+            ";
+
+            $stmt = $pdo->query($sql);
+            $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($rooms as $room) {
+                echo "<tr>
+                        <td>" . htmlspecialchars($room['roomNum']) . "</td>
+                        <td>" . htmlspecialchars($room['num_beds']) . "</td>
+                        <td>" . htmlspecialchars($room['numStudents']) . "</td>
+                    </tr>";
+            }
+            echo "</table>";
+        } catch (PDOException $e) {
+            echo "<p class='error-message'>Error fetching room data: " . $e->getMessage() . "</p>";
+        }
+
+        // Close the PDO connection
+        $pdo = null;
         ?>
     </div>
 </body>
 </html>
+
 

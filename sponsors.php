@@ -91,7 +91,7 @@ try {
 </head>
 <body class="background">
     <div class="button-container">
-        <a href="index.php" class="btn-link">Go back home</a>
+    <a href="conference.php">Go back home</a>
     </div>
 
     <h1 class="title">Sponsor Information</h1>
