@@ -61,13 +61,14 @@ try {
                 </option>
             <?php endforeach; ?>
         </select>
-        <input type="submit" value="View Jobs">
+        <input type="submit" value="View Jobs" class="submit-btn">
     </form>
+    
 
     <?php if ($selectedCompany): ?>
         <h2>Jobs posted by <?= htmlspecialchars($selectedCompany) ?></h2>
         <?php if ($companyJobs): ?>
-            <table border="1">
+            <table class="data-table">
                 <tr><th>Title</th><th>Salary</th><th>Location</th></tr>
                 <?php foreach ($companyJobs as $job): ?>
                     <tr>
@@ -84,7 +85,7 @@ try {
 
     <h2>All Job Listings</h2>
     <?php if ($allJobs): ?>
-        <table border="1">
+        <table class="data-table">
             <tr><th>Company</th><th>Title</th><th>Salary</th><th>Location</th></tr>
             <?php foreach ($allJobs as $job): ?>
                 <tr>

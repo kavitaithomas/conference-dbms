@@ -12,15 +12,18 @@
 
 <body class="background">
     <div>
-        
-    <div class="button-container">
-        <a href="index.php">Go back home</a>
-    </div>
+
+        <!-- Back Button -->
+        <div class="button-container">
+            <a href="index.php">Go back home</a>
+        </div>
+
         <h1>Organizing Sub-Committees</h1>
         <p>Select a sub-committee to view its members:</p>
 
+        <!-- Form Section -->
         <form action="subcommittees.php" method="post">
-            <label for="subcommittee">Sub-Committee:</label><br>
+            <label for="subcommittee">Sub-Committee:</label>
             <select name="subcommittee" id="subcommittee" required>
                 <option value="">-- Select --</option>
                 <?php
@@ -37,13 +40,14 @@
                 }
                 ?>
             </select><br><br>
-            <input type="submit" value="View Members" class="home-button">
+            <input type="submit" value="View Members" class="submit-btn">
         </form>
 
+        <!-- Member List Output -->
         <?php
         if (!empty($_POST['subcommittee'])) {
             $subcommittee = $_POST['subcommittee'];
-            echo "<h2>Members of " . htmlspecialchars($subcommittee) . "</h2>";
+            echo "<h2 class='results-heading'>Members of " . htmlspecialchars($subcommittee) . "</h2>";
 
             try {
                 $sql = "
@@ -58,16 +62,16 @@
                 $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
                 if ($members) {
-                    echo "<table><tr><th>Member Name</th></tr>";
+                    echo "<table class='results-table'><tr><th>Member Name</th></tr>";
                     foreach ($members as $m) {
                         echo "<tr><td>" . htmlspecialchars($m['member_name']) . "</td></tr>";
                     }
                     echo "</table>";
                 } else {
-                    echo "<p>No members found for this sub-committee.</p>";
+                    echo "<p class='no-results'>No members found for this sub-committee.</p>";
                 }
             } catch (PDOException $e) {
-                echo "<p>Error fetching members: " . $e->getMessage() . "</p>";
+                echo "<p class='error-message'>Error fetching members: " . $e->getMessage() . "</p>";
             }
 
             $pdo = null;

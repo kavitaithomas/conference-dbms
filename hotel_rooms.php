@@ -9,16 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body class="background">
-    <div class="container">
-    <div class="button-container">
-        <a href="index.php">Go back home</a>
-    </div>
+    <div>
+        
+        <div class="button-container">
+            <a href="index.php">Go back home</a>
+        </div>
 
         <h1>Hotel Room Assignments</h1>
         <p>Select a hotel room to view the students assigned to it:</p>
 
         <form method="post" action="hotel_rooms.php">
-            <label for="room">Hotel Room:</label><br>
+            <label for="room">Hotel Room:</label>
             <select name="room" id="room" required>
                 <option value="">-- Select Room --</option>
                 <?php
@@ -35,13 +36,13 @@
                 }
                 ?>
             </select><br><br>
-            <input type="submit" value="View Students" class="home-button">
+            <input type="submit" value="View Students" class="submit-btn">
         </form>
 
         <?php
         if (!empty($_POST['room'])) {
             $roomNum = $_POST['room'];
-            echo "<h2>Students in Room " . htmlspecialchars($roomNum) . "</h2>";
+            echo "<h2 class='results-heading'>Students in Room " . htmlspecialchars($roomNum) . "</h2>";
 
             try {
                 $sql = "
@@ -56,16 +57,16 @@
                 $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 if ($students) {
-                    echo "<table><tr><th>First Name</th><th>Last Name</th></tr>";
+                    echo "<table class='results-table'><tr><th>First Name</th><th>Last Name</th></tr>";
                     foreach ($students as $s) {
                         echo "<tr><td>" . htmlspecialchars($s['firstname']) . "</td><td>" . htmlspecialchars($s['lastname']) . "</td></tr>";
                     }
                     echo "</table>";
                 } else {
-                    echo "<p>No students assigned to this room.</p>";
+                    echo "<p class='no-results'>No students assigned to this room.</p>";
                 }
             } catch (PDOException $e) {
-                echo "<p>Error fetching students: " . $e->getMessage() . "</p>";
+                echo "<p class='error-message'>Error fetching students: " . $e->getMessage() . "</p>";
             }
 
             $pdo = null;
@@ -74,3 +75,4 @@
     </div>
 </body>
 </html>
+

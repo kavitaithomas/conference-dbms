@@ -5,7 +5,7 @@ include 'config.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Handle form submission for modifying session
+//form submission for modifying session
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_session'])) {
     $sessionID = $_POST['session_id'];  // ID or unique identifier for session
     $newDate = $_POST['new_date'];
@@ -37,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_session'])) {
         // Update the session record
         $updateStmt->execute([$newDate, $newStime, $newEtime, $newLocation, $location, $date, $stime]);
 
-        // Success message
+        
         $success = "Session updated successfully.";
     } catch (PDOException $e) {
-        // Debugging: Output error if SQL fails
+        
         echo "<p>Error updating session: " . $e->getMessage() . "</p>";
     }
 }
@@ -89,106 +89,108 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body class="background">
-    <div class="button-container">
-        <a href="index.php">Go back home</a>
-    </div>
-    <h1>View Conference Schedule</h1>
-    <p>Select a date to view all sessions scheduled for that day:</p>
+    <div class="container">
 
-    <!-- Form to select the date from available session dates -->
-    <form action="schedule.php" method="post">
-        <label for="schedule_date">Date:</label>
-        <select id="schedule_date" name="schedule_date" required>
-            <option value="">-- Select --</option>
-            <?php
-            // Dynamically populate the dropdown with available session dates
-            foreach ($dates as $date) {
-                echo '<option value="' . htmlspecialchars($date['date']) . '">' . htmlspecialchars($date['date']) . '</option>';
-            }
-            ?>
-        </select>
-        <input type="submit" value="View Schedule">
-    </form>
+        <div class="button-container">
+            <a href="index.php">Go back home</a>
+        </div>
 
-    <!-- Display the schedule if a date is selected -->
-    <?php
-    if (isset($schedule)) {
-        echo "<h2>Schedule for " . htmlspecialchars($selectedDate) . "</h2>";
+        <h1>View Conference Schedule</h1>
+        <p>Select a date to view all sessions scheduled for that day:</p>
 
-        if ($schedule) {
-            echo "<table border='1'>
-                    <tr>
-                        <th>Location</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Speaker</th>
-                        <th>Action</th>
-                    </tr>";
-
-            foreach ($schedule as $row) {
-                echo "<tr>
-                        <td>" . htmlspecialchars($row['location']) . "</td>
-                        <td>" . htmlspecialchars($row['stime']) . "</td>
-                        <td>" . htmlspecialchars($row['etime']) . "</td>
-                        <td>";
-                if ($row['firstname']) {
-                    echo htmlspecialchars($row['firstname']) . " " . htmlspecialchars($row['lastname']);
-                } else {
-                    echo "—";
+        <!-- Form to select the date from available session dates -->
+        <form action="schedule.php" method="post" class="form">
+            <label for="schedule_date">Date:</label>
+            <select id="schedule_date" name="schedule_date" required class="dropdown">
+                <option value="">-- Select --</option>
+                <?php
+                foreach ($dates as $date) {
+                    echo '<option value="' . htmlspecialchars($date['date']) . '">' . htmlspecialchars($date['date']) . '</option>';
                 }
-                echo "</td>
-                        <td>
-                            <form method='POST'>
-                                <input type='hidden' name='session_id' value='" . htmlspecialchars($row['location']) . "," . htmlspecialchars($row['date']) . "," . htmlspecialchars($row['stime']) . "'>
-                                <input type='submit' name='modify_session' value='Modify'>
-                            </form>
-                        </td>
-                    </tr>";
+                ?>
+            </select>
+            <input type="submit" value="View Schedule" class="submit-btn">
+        </form>
+
+        <?php
+        if (isset($schedule)) {
+            echo "<h2>Schedule for " . htmlspecialchars($selectedDate) . "</h2>";
+
+            if ($schedule) {
+                echo "<table class='styled-table'>
+                        <tr>
+                            <th>Location</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Speaker</th>
+                            <th>Action</th>
+                        </tr>";
+
+                foreach ($schedule as $row) {
+                    echo "<tr>
+                            <td>" . htmlspecialchars($row['location']) . "</td>
+                            <td>" . htmlspecialchars($row['stime']) . "</td>
+                            <td>" . htmlspecialchars($row['etime']) . "</td>
+                            <td>";
+                    if ($row['firstname']) {
+                        echo htmlspecialchars($row['firstname']) . " " . htmlspecialchars($row['lastname']);
+                    } else {
+                        echo "—";
+                    }
+                    echo "</td>
+                            <td>
+                                <form method='POST' class='inline-form'>
+                                    <input type='hidden' name='session_id' value='" . htmlspecialchars($row['location']) . "," . htmlspecialchars($row['date']) . "," . htmlspecialchars($row['stime']) . "'>
+                                    <input type='submit' name='modify_session' value='Modify' class='modify-button'>
+                                </form>
+                            </td>
+                        </tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "<p>No sessions scheduled for this date.</p>";
             }
-            echo "</table>";
-        } else {
-            echo "<p>No sessions scheduled for this date.</p>";
         }
-    }
 
-    // Display form for modifying session
-    if (isset($_POST['modify_session'])) {
-        // Extract the session details from the hidden session ID
-        list($location, $date, $stime) = explode(',', $_POST['session_id']);
+        if (isset($_POST['modify_session'])) {
+            list($location, $date, $stime) = explode(',', $_POST['session_id']);
 
-        // Fetch the session details to pre-fill the form
-        $fetchSessionStmt = $pdo->prepare("SELECT * FROM session WHERE location = ? AND date = ? AND stime = ?");
-        $fetchSessionStmt->execute([$location, $date, $stime]);
-        $session = $fetchSessionStmt->fetch(PDO::FETCH_ASSOC);
+            $fetchSessionStmt = $pdo->prepare("SELECT * FROM session WHERE location = ? AND date = ? AND stime = ?");
+            $fetchSessionStmt->execute([$location, $date, $stime]);
+            $session = $fetchSessionStmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($session) {
-            ?>
-            <h2>Modify Session</h2>
-            <form method="POST">
-                <input type="hidden" name="session_id" value="<?= htmlspecialchars($session['location']) . ',' . htmlspecialchars($session['date']) . ',' . htmlspecialchars($session['stime']) ?>">
-                <label for="new_date">New Date:</label>
-                <input type="date" name="new_date" value="<?= htmlspecialchars($session['date']) ?>" required><br>
-                <label for="new_stime">New Start Time:</label>
-                <input type="time" name="new_stime" value="<?= htmlspecialchars($session['stime']) ?>" required><br>
-                <label for="new_etime">New End Time:</label>
-                <input type="time" name="new_etime" value="<?= htmlspecialchars($session['etime']) ?>" required><br>
-                <label for="new_location">New Location:</label>
-                <input type="text" name="new_location" value="<?= htmlspecialchars($session['location']) ?>" required><br>
-                <input type="submit" name="update_session" value="Update Session">
-            </form>
-            <?php
-        } else {
-            echo "<p>Session not found.</p>";
+            if ($session) {
+                ?>
+                <h2>Modify Session</h2>
+                <form method="POST" class="form">
+                    <input type="hidden" name="session_id" value="<?= htmlspecialchars($session['location']) . ',' . htmlspecialchars($session['date']) . ',' . htmlspecialchars($session['stime']) ?>">
+                    <label for="new_date">New Date:</label>
+                    <input type="date" name="new_date" value="<?= htmlspecialchars($session['date']) ?>" required><br>
+
+                    <label for="new_stime">New Start Time:</label>
+                    <input type="time" name="new_stime" value="<?= htmlspecialchars($session['stime']) ?>" required><br>
+
+                    <label for="new_etime">New End Time:</label>
+                    <input type="time" name="new_etime" value="<?= htmlspecialchars($session['etime']) ?>" required><br>
+
+                    <label for="new_location">New Location:</label>
+                    <input type="text" name="new_location" value="<?= htmlspecialchars($session['location']) ?>" required><br>
+
+                    <input type="submit" name="update_session" value="Update Session" class="home-button">
+                </form>
+                <?php
+            } else {
+                echo "<p>Session not found.</p>";
+            }
         }
-    }
-    ?>
+        ?>
 
-    <!-- Display Success/Error Messages -->
-    <?php if (isset($success)): ?>
-        <p style="color: green"><?= htmlspecialchars($success) ?></p>
-    <?php elseif (isset($error)): ?>
-        <p style="color: red"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
+        <?php if (isset($success)): ?>
+            <p class="success-message"><?= htmlspecialchars($success) ?></p>
+        <?php elseif (isset($error)): ?>
+            <p class="error-message"><?= htmlspecialchars($error) ?></p>
+        <?php endif; ?>
+    </div>
 </body>
 </html>
 

@@ -1,20 +1,15 @@
-/* Image container to center and make image smaller */
-
 body.background {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 100vh; /* Use full viewport height */
-  margin: 0; /* Remove default margin */
-  flex-direction: column; /* Arrange items vertically */
-  text-align: center; /* Center text */
-  background-color: #edf4fd;
+  background-color: #f5f7fa;
   font-family: "Roboto", sans-serif;
+  padding: 20px;
+  margin-left: 10rem;
+  margin-right: 10rem;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 }
 
-h1 {
-  color: #0000a2;
-  text-align: center; /* To center the h1 */
+.homepage {
+  align-items: center;
 }
 
 .img-container {
@@ -26,15 +21,58 @@ h1 {
 }
 
 .img-container img {
-  height: 500px; /* Maintain aspect ratio */
-  width: auto; /* You can adjust this size as needed */
+  height: auto; /* Maintain aspect ratio */
+  width: 1000px; /* You can adjust this size as needed */
 }
 
-/* Button container to display buttons in a row and center them */
+h1 {
+  color: #0000a2;
+  text-align: center;
+}
+
+h2 {
+  color: #000066;
+  margin-top: 30px;
+  font-size: 1.6rem;
+}
+
+p {
+  font-size: 16px;
+  color: #333;
+}
+
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 80, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 12px 20px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #0000a2;
+  color: white;
+  font-weight: 600;
+}
+
+tr:hover {
+  background-color: #f1f1ff;
+}
+
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 15px; /* Space between buttons */
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .button-container a {
@@ -50,4 +88,92 @@ h1 {
 
 .button-container a:hover {
   background-color: #4983ff;
+}
+
+.submit-btn {
+  padding: 10px;
+  background-color: #0000a2;
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 16px;
+  border: none;
+}
+
+.submit-btn:hover {
+  background-color: #4983ff;
+}
+
+.form-row {
+  display: flex;
+  justify-content: start;
+  gap: 50px;
+  margin-bottom: 30px;
+}
+
+.form-container {
+  width: 30%;
+  padding-right: 20px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+/* Form Container */
+form {
+  border-radius: 8px;
+  border: none;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Form Label */
+form label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Form Select */
+form select {
+  padding: 5px;
+  border-radius: 6px;
+}
+
+form input,
+form select {
+  margin-bottom: 15px;
+}
+
+/* .form-container input[type="text"],
+.form-container input[type="number"],
+.form-container select {
+  width: 30%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-container input[type="submit"] {
+  background-color: #0000a2;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.form-container input[type="submit"]:hover {
+  background-color: #4983ff;
+} */
+
+.success-message {
+  color: green;
+  font-weight: bold;
+  text-align: center;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  text-align: center;
 }

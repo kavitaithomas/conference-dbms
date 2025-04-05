@@ -78,13 +78,13 @@ $totalIntake = $totalRegistration + $totalSponsorship;
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Hotel Room Students</title>
+    <title>Attendees</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="background">
     <div class="button-container">
         <a href="index.php">Go back home</a>
     </div>
@@ -96,91 +96,143 @@ $totalIntake = $totalRegistration + $totalSponsorship;
         <p style="color: red"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 
-    <!-- Add Student -->
-    <h2>Add Student</h2>
-    <form method="post">
-        <input type="hidden" name="type" value="student">
-        ID: <input type="text" name="id" required><br> <!-- Input for custom ID -->
-        First Name: <input type="text" name="fname" required><br>
-        Last Name: <input type="text" name="lname" required><br>
-        Registration Fee: <input type="number" name="fee" step="0.01" required><br>
-        Assign to Room:
-        <select name="roomNum">
-            <option value="">-- Select Room --</option>
-            <?php foreach ($rooms as $r): ?>
-                <option value="<?= htmlspecialchars($r['num']) ?>"><?= htmlspecialchars($r['num']) ?></option>
-            <?php endforeach; ?>
-        </select><br>
-        <input type="submit" value="Add Student">
-    </form>
+    <div class="form-row">
+        <!-- Student Form -->
+        <div class="form-container">
+            <h2>Add Student</h2>
+            <form method="post">
+                <input type="hidden" name="type" value="student">
+                ID: <input type="text" name="id" required><br>
+                First Name: <input type="text" name="fname" required><br>
+                Last Name: <input type="text" name="lname" required><br>
+                Registration Fee: <input type="number" name="fee" step="0.01" required><br>
+                Assign to Room:
+                <select name="roomNum">
+                    <option value="">-- Select Room --</option>
+                    <?php foreach ($rooms as $r): ?>
+                        <option value="<?= htmlspecialchars($r['num']) ?>"><?= htmlspecialchars($r['num']) ?></option>
+                    <?php endforeach; ?>
+                </select><br>
+                <input type="submit" value="Add Student" class="submit-btn">
+            </form>
+        </div>
 
-    <!-- Add Professional -->
-    <h2>Add Professional</h2>
-    <form method="post">
-        <input type="hidden" name="type" value="professional">
-        ID: <input type="text" name="id" required><br> <!-- Input for custom ID -->
-        First Name: <input type="text" name="fname" required><br>
-        Last Name: <input type="text" name="lname" required><br>
-        Registration Fee: <input type="number" name="fee" step="0.01" required><br>
-        <input type="submit" value="Add Professional">
-    </form>
+        <!-- Professional Form -->
+        <div class="form-container">
+            <h2>Add Professional</h2>
+            <form method="post">
+                <input type="hidden" name="type" value="professional">
+                ID: <input type="text" name="id" required><br>
+                First Name: <input type="text" name="fname" required><br>
+                Last Name: <input type="text" name="lname" required><br>
+                Registration Fee: <input type="number" name="fee" step="0.01" required><br>
+                <input type="submit" value="Add Professional" class="submit-btn">
+            </form>
+        </div>
 
-    <!-- Add Sponsor -->
-    <h2>Add Sponsor</h2>
-    <form method="post">
-        <input type="hidden" name="type" value="sponsor">
-        ID: <input type="text" name="id" required><br> <!-- Input for custom ID -->
-        First Name: <input type="text" name="fname" required><br>
-        Last Name: <input type="text" name="lname" required><br>
-        Registration Fee: <input type="number" name="fee" step="0.01" required><br>
-        <input type="submit" value="Add Sponsor">
-    </form>
+        <!-- Sponsor Form -->
+        <div class="form-container">
+            <h2>Add Sponsor</h2>
+            <form method="post">
+                <input type="hidden" name="type" value="sponsor">
+                ID: <input type="text" name="id" required><br>
+                First Name: <input type="text" name="fname" required><br>
+                Last Name: <input type="text" name="lname" required><br>
+                Registration Fee: <input type="number" name="fee" step="0.01" required><br>
+                <input type="submit" value="Add Sponsor" class="submit-btn">
+            </form>
+        </div>
+    </div>
 
-    <hr>
 
-    <!-- Display Lists -->
     <h2>All Attendees</h2>
+<div class="form-row">
+    <div class="form-container">
+        <h3>Students</h3>
+        <?php if ($students): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($students as $s): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($s['id']) ?></td>
+                            <td><?= htmlspecialchars($s['firstname'] . ' ' . $s['lastname']) ?></td>
+                            <td>$<?= $s['fee'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No students yet.</p>
+        <?php endif; ?>
+    </div>
 
-    <h3>Students</h3>
-    <?php if ($students): ?>
-        <ul>
-            <?php foreach ($students as $s): ?>
-                <li><?= htmlspecialchars($s['id']) ?> - <?= htmlspecialchars($s['firstname'] . ' ' . $s['lastname']) ?> - $<?= $s['fee'] ?></li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>No students yet.</p>
-    <?php endif; ?>
+    <div class="form-container">
+        <h3>Professionals</h3>
+        <?php if ($professionals): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($professionals as $p): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($p['id']) ?></td>
+                            <td><?= htmlspecialchars($p['firstname'] . ' ' . $p['lastname']) ?></td>
+                            <td>$<?= $p['fee'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No professionals yet.</p>
+        <?php endif; ?>
+    </div>
 
-    <h3>Professionals</h3>
-    <?php if ($professionals): ?>
-        <ul>
-            <?php foreach ($professionals as $p): ?>
-                <li><?= htmlspecialchars($p['id']) ?> - <?= htmlspecialchars($p['firstname'] . ' ' . $p['lastname']) ?> - $<?= $p['fee'] ?></li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>No professionals yet.</p>
-    <?php endif; ?>
+    <div class="form-container">
+        <h3>Sponsors</h3>
+        <?php if ($sponsors): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($sponsors as $sp): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($sp['id']) ?></td>
+                            <td><?= htmlspecialchars($sp['firstname'] . ' ' . $sp['lastname']) ?></td>
+                            <td>$<?= $sp['fee'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No sponsors yet.</p>
+        <?php endif; ?>
+    </div>
+</div>
 
-    <h3>Sponsors</h3>
-    <?php if ($sponsors): ?>
-        <ul>
-            <?php foreach ($sponsors as $sp): ?>
-                <li><?= htmlspecialchars($sp['id']) ?> - <?= htmlspecialchars($sp['firstname'] . ' ' . $sp['lastname']) ?> - $<?= $sp['fee'] ?></li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>No sponsors yet.</p>
-    <?php endif; ?>
-
-    <hr>
 
     <!-- Total Intake Display -->
-    <h3>Total Intake</h3>
+    <h2>Total Intake</h2>
     <p><strong>Total Registration Fees:</strong> $<?= number_format($totalRegistration, 2) ?></p>
     <p><strong>Total Sponsorship Fees:</strong> $<?= number_format($totalSponsorship, 2) ?></p>
     <p><strong>Total Intake:</strong> $<?= number_format($totalIntake, 2) ?></p>
 
 </body>
 </html>
+

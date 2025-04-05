@@ -12,21 +12,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body class="background">
-    <h1>Welcome to the Conference Organizer Portal</h1>
-    
-    <!-- Image container -->
-    <div class="img-container">
-        <img src="main_page.jpeg" alt="Conference Image">
-    </div>
+    <div class="homepage">
+        <h1>Welcome to the Conference Organizer Portal</h1>
+        
+        <!-- Image container -->
+        <div class="img-container">
+            <img src="main_page.jpeg" alt="Conference Image">
+        </div>
 
-    <!-- Navigation menu -->
-    <div class="button-container">
-            <a href="subcommittees.php">Subcommittees</a>
-            <a href="hotel_rooms.php">Hotel Rooms</a>
-            <a href="schedule.php">Schedule</a>
-            <a href="sponsors.php">Sponsors</a>
-            <a href="jobs.php">Jobs</a>
-            <a href="attendees.php">Attendees</a>
+        <!-- Navigation menu -->
+        <div class="button-container">
+                <a href="subcommittees.php">Subcommittees</a>
+                <a href="hotel_rooms.php">Hotel Rooms</a>
+                <a href="schedule.php">Schedule</a>
+                <a href="sponsors.php">Sponsors</a>
+                <a href="jobs.php">Jobs</a>
+                <a href="attendees.php">Attendees</a>
+        </div>
     </div>
 
 </body>

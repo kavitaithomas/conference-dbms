@@ -91,56 +91,61 @@ try {
 </head>
 <body class="background">
     <div class="button-container">
-        <a href="index.php">Go back home</a>
+        <a href="index.php" class="btn-link">Go back home</a>
     </div>
-    <h1>Sponsor Information</h1>
-    <p>Here are the sponsors and their level of sponsorship:</p>
 
-    <?php
-    if ($sponsors) {
-        echo "<table border='1'>
+    <h1 class="title">Sponsor Information</h1>
+    <p class="subtitle">Here are the sponsors and their level of sponsorship:</p>
+
+    <?php if ($sponsors): ?>
+        <table class="data-table">
+            <tr>
+                <th>Company Name</th>
+                <th>Sponsorship Level</th>
+                <th>Representative Name</th>
+            </tr>
+            <?php foreach ($sponsors as $sponsor): ?>
                 <tr>
-                    <th>Company Name</th>
-                    <th>Sponsorship Level</th>
-                    <th>Representative Name</th>
-                </tr>";
-
-        foreach ($sponsors as $sponsor) {
-            echo "<tr>
-                    <td>" . htmlspecialchars($sponsor['company_name']) . "</td>
-                    <td>" . htmlspecialchars($sponsor['sponsorship_level']) . "</td>
-                    <td>" . htmlspecialchars($sponsor['sponsor_name']) . "</td>
-                  </tr>";
-        }
-        echo "</table>";
-    } else {
-        echo "<p>No sponsors found.</p>";
-    }
-    ?>
+                    <td><?= htmlspecialchars($sponsor['company_name']) ?></td>
+                    <td><?= htmlspecialchars($sponsor['sponsorship_level']) ?></td>
+                    <td><?= htmlspecialchars($sponsor['sponsor_name']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p class="info-text">No sponsors found.</p>
+    <?php endif; ?>
 
     <!-- Add New Sponsor Form -->
-    <h2>Add New Sponsoring Company</h2>
-    <form method="POST">
-        <input type="text" name="company_name" placeholder="Company Name" required><br>
-        <input type="text" name="sponsorship_level" placeholder="Sponsorship Level" required><br>
-        <input type="number" name="sponsor_id" placeholder="Sponsor ID" required><br>
-        <input type="text" name="sponsor_first_name" placeholder="Rep First Name" required><br>
-        <input type="text" name="sponsor_last_name" placeholder="Rep Last Name" required><br>
-        <input type="submit" name="add_sponsor" value="Add Sponsoring Company">
-    </form>
+    <div class="form-row">
+        <div>
+        <h2 class="form-heading">Add New Sponsoring Company</h2>
+        <form method="POST">
+            <input type="text" name="company_name" placeholder="Company Name" class="input-field" required><br>
+            <input type="text" name="sponsorship_level" placeholder="Sponsorship Level" class="input-field" required><br>
+            <input type="number" name="sponsor_id" placeholder="Sponsor ID" class="input-field" required><br>
+            <input type="text" name="sponsor_first_name" placeholder="Rep First Name" class="input-field" required><br>
+            <input type="text" name="sponsor_last_name" placeholder="Rep Last Name" class="input-field" required><br>
+            <input type="submit" name="add_sponsor" value="Add Sponsoring Company" class="submit-btn">
+        </form>
+        </div>
 
-    <!-- Delete Sponsoring Company Form -->
-    <h2>Delete Sponsoring Company</h2>
-    <form method="POST">
-        <input type="text" name="company_name_to_delete" placeholder="Company Name to Delete" required><br>
-        <input type="submit" name="delete_sponsor" value="Delete Sponsoring Company">
-    </form>
+        <div>
+        <!-- Delete Sponsoring Company Form -->
+        <h2 class="form-heading">Delete Sponsoring Company</h2>
+        <form method="POST">
+            <input type="text" name="company_name_to_delete" placeholder="Company Name to Delete" class="input-field" required><br>
+            <input type="submit" name="delete_sponsor" value="Delete Sponsoring Company" class="submit-btn">
+        </form>
+        </div>
+    </div>
 
     <!-- Display Success/Error Messages -->
     <?php if ($success): ?>
-        <p style="color: green"><?= htmlspecialchars($success) ?></p>
+        <p class="success-message"><?= htmlspecialchars($success) ?></p>
     <?php elseif ($error): ?>
-        <p style="color: red"><?= htmlspecialchars($error) ?></p>
+        <p class="error-message"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 </body>
+
 </html>
