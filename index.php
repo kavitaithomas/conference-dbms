@@ -7,34 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conference Organizer</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
-<body>
-        <h1>Conference Organizer Portal</h1>
-		<?php
-            $result = $pdo->query("select * from company");
-            echo "<ol>";
-            while ($row = $result->fetch()) {
-                echo "<li>";
-                echo $row["name"]."</li>";
-            }
-            echo "</ol>";
-        ?>
-        
-        <nav>
-            <ul>
-                <li><a href="subcommittees.php">Subcommittees</a></li>
-                <li><a href="hotel_rooms.php">Hotel Rooms</a></li>
-                <li><a href="schedule.php">Schedule</a></li>
-                <li><a href="sponsors.php">Sponsors</a></li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="attendees.php">Attendees</a></li>
-            </ul>
-        </nav>
-    <main>
-        <p>Welcome to the Conference Organizer Portal.</p>
-    </main>
-    <footer>
-        <p>Kavita Thomas 2025</p>
-    </footer>
+<body class="background">
+    <h1>Welcome to the Conference Organizer Portal</h1>
+    
+    <!-- Image container -->
+    <div class="img-container">
+        <img src="main_page.jpeg" alt="Conference Image">
+    </div>
+
+    <!-- Navigation menu -->
+    <div class="button-container">
+            <a href="subcommittees.php">Subcommittees</a>
+            <a href="hotel_rooms.php">Hotel Rooms</a>
+            <a href="schedule.php">Schedule</a>
+            <a href="sponsors.php">Sponsors</a>
+            <a href="jobs.php">Jobs</a>
+            <a href="attendees.php">Attendees</a>
+    </div>
+
 </body>
 </html>

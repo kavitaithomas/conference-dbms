@@ -82,10 +82,16 @@ try {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Conference Schedule</title>
+    <title>View Hotel Room Students</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
-<body>
-    <a href="index.php"><button>Go back home</button></a>
+<body class="background">
+    <div class="button-container">
+        <a href="index.php">Go back home</a>
+    </div>
     <h1>View Conference Schedule</h1>
     <p>Select a date to view all sessions scheduled for that day:</p>
 

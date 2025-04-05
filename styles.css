@@ -1,0 +1,53 @@
+/* Image container to center and make image smaller */
+
+body.background {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Use full viewport height */
+  margin: 0; /* Remove default margin */
+  flex-direction: column; /* Arrange items vertically */
+  text-align: center; /* Center text */
+  background-color: #edf4fd;
+  font-family: "Roboto", sans-serif;
+}
+
+h1 {
+  color: #0000a2;
+  text-align: center; /* To center the h1 */
+}
+
+.img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px; /* Space between image and buttons */
+  border: white;
+}
+
+.img-container img {
+  height: 500px; /* Maintain aspect ratio */
+  width: auto; /* You can adjust this size as needed */
+}
+
+/* Button container to display buttons in a row and center them */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Space between buttons */
+}
+
+.button-container a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0000a2;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.button-container a:hover {
+  background-color: #4983ff;
+}
