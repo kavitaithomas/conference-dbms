@@ -1,5 +1,5 @@
 # Conference Database Management System
-A web-based CRUD application to manage a conference database. The app uses PHP and PDOs instead of mysqli functions to work with nearly any DBMS. 
+A web-based interface application to manage a conference database. The app uses PHP and PDOs instead of the mysqli api functions to work with nearly any DBMS. 
 
 Submitted as my final project for CISC332 - Database Management Systems. Received 15/15.
 
